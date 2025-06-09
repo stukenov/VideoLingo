@@ -40,6 +40,11 @@ whisper:
 # Whether to burn subtitles into the video
 burn_subtitles: true
 
+# Whether to keep original audio and overlay TTS as voiceover
+voiceover: false
+# Volume for original audio when voiceover is enabled
+voiceover_volume: 0.3
+
 ## ======================== Advanced Settings ======================== ##
 # *🔬 h264_nvenc GPU acceleration for ffmpeg, make sure your GPU supports it
 ffmpeg_gpu: false

@@ -32,6 +32,8 @@ def merge_video_audio():
     """Merge video and audio, and reduce video volume"""
     VIDEO_FILE = find_video_files()
     background_file = _BACKGROUND_AUDIO_FILE
+    voiceover = load_key("voiceover")
+    voiceover_volume = load_key("voiceover_volume")
     
     if not load_key("burn_subtitles"):
         rprint("[bold yellow]Warning: A 0-second black video will be generated as a placeholder as subtitles are not burned in.[/bold yellow]")
@@ -64,14 +66,24 @@ def merge_video_audio():
         f"BackColour={TRANS_BACK_COLOR},Alignment=2,MarginV=27,BorderStyle=4'"
     )
     
-    cmd = [
-        'ffmpeg', '-y', '-i', VIDEO_FILE, '-i', background_file, '-i', normalized_dub_audio,
-        '-filter_complex',
-        f'[0:v]scale={TARGET_WIDTH}:{TARGET_HEIGHT}:force_original_aspect_ratio=decrease,'
-        f'pad={TARGET_WIDTH}:{TARGET_HEIGHT}:(ow-iw)/2:(oh-ih)/2,'
-        f'{subtitle_filter}[v];'
-        f'[1:a][2:a]amix=inputs=2:duration=first:dropout_transition=3[a]'
-    ]
+    if voiceover:
+        cmd = [
+            'ffmpeg', '-y', '-i', VIDEO_FILE, '-i', normalized_dub_audio,
+            '-filter_complex',
+            f'[0:v]scale={TARGET_WIDTH}:{TARGET_HEIGHT}:force_original_aspect_ratio=decrease,'
+            f'pad={TARGET_WIDTH}:{TARGET_HEIGHT}:(ow-iw)/2:(oh-ih)/2,'
+            f'{subtitle_filter}[v];'
+            f'[0:a]volume={voiceover_volume}[orig];[orig][1:a]amix=inputs=2:duration=first:dropout_transition=3[a]'
+        ]
+    else:
+        cmd = [
+            'ffmpeg', '-y', '-i', VIDEO_FILE, '-i', background_file, '-i', normalized_dub_audio,
+            '-filter_complex',
+            f'[0:v]scale={TARGET_WIDTH}:{TARGET_HEIGHT}:force_original_aspect_ratio=decrease,'
+            f'pad={TARGET_WIDTH}:{TARGET_HEIGHT}:(ow-iw)/2:(oh-ih)/2,'
+            f'{subtitle_filter}[v];'
+            f'[1:a][2:a]amix=inputs=2:duration=first:dropout_transition=3[a]'
+        ]
 
     if load_key("ffmpeg_gpu"):
         rprint("[bold green]Using GPU acceleration...[/bold green]")
