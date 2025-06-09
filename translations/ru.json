@@ -22,6 +22,8 @@
     "Vocal separation enhance": "Улучшение отделения голоса",
     "Burn-in Subtitles": "Встроить субтитры",
     "Whether to burn subtitles into the video, will increase processing time": "Встраивать ли субтитры в видео, это увеличит время обработки",
+    "Voiceover Mode": "Режим закадрового текста",
+    "Keep original audio and overlay TTS as voiceover": "Сохранять оригинальный звук и накладывать TTS как закадровый текст",
     "Video Resolution": "Разрешение видео",
     "Recommended for videos with loud background noise, but will increase processing time": "Рекомендуется для видео с громким фоновым шумом, но увеличит время обработки",
     "Dubbing Settings": "Настройки дубляжа",
